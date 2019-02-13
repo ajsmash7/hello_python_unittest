@@ -47,10 +47,14 @@ class ClassList:
             return self.class_list.index(student) + 1
         return None
 
-
-    ## TODO add a method called is_class_full.
+    # TODO add a method called is_class_full.
     # This should return True or False to indicate if the class is full.
-
+    # if length of classlist is greater than or equal to max students, return true
+    def is_class_full(self):
+        if self.max_students <= len(self.class_list):
+            return True
+        else:
+            return False
 
     def __str__(self):
         return ", ".join(self.class_list)
@@ -60,7 +64,7 @@ class ClassList:
 
 def main():
 
-    ## Just for testing
+    # Just for testing
 
     capstone = ClassList(5)
     capstone.add_student('Anna')
