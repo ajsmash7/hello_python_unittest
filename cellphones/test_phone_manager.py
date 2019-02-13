@@ -27,6 +27,7 @@ class TestPhoneManager(unittest.TestCase):
 
         testAssignmentMgr = PhoneAssignments()
         testAssignmentMgr.add_phone(testPhone1)
+        testAssignmentMgr.add_phone(testPhone2)
 
         with self.assertRaises(PhoneError):
             testAssignmentMgr.add_phone(testPhone2)
@@ -35,21 +36,39 @@ class TestPhoneManager(unittest.TestCase):
     def test_create_and_add_new_employee(self):
         # TODO write this test and then remove the self.fail() statement
         # Add some employees and verify they are present in the PhoneAssignments.employees list
-        self.fail()
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testEmployee2 = Employee(2, 'Kanye West')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_employee(testEmployee2)
+        self.assertTrue(testEmployee1, testAssignmentMgr.employees)
+        self.assertTrue(testEmployee2, testAssignmentMgr.employees)
 
 
     def test_create_and_add_employee_with_duplicate_id(self):
         # TODO write this test and then remove the self.fail() statement
         # TODO you'll need to fix the add_employee method in PhoneAssignments to make this test PhoneAssignments
         # This method will be similar to test_create_and_add_phone_with_duplicate_id
-        self.fail()
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testEmployee2 = Employee(1, 'Kanye West')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_employee(testEmployee2)
+        with self.assertRaises(PhoneError):
+            testAssignmentMgr.add_employee(testEmployee2)
 
 
     def test_assign_phone_to_employee(self):
         # TODO write this test and remove the self.fail() statement
         # TODO you'll need to fix the assign method in PhoneAssignments
 
-        self.fail()
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testPhone1 = Phone(1, 'Apple', 'iPhone 6')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_phone(testPhone1)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee1)
+        self.assertEquals(testEmployee1.id, testPhone1.employee_id)
 
 
     def test_assign_phone_that_has_already_been_assigned_to_employee(self):
@@ -57,27 +76,61 @@ class TestPhoneManager(unittest.TestCase):
         # TODO write this test and remove the self.fail() statement
         # TODO you'll need to fix the assign method in PhoneAssignments so it throws an exception if the phone is alreaady assigned.
 
-        self.fail()
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testEmployee2 = Employee(2, 'Kanye West')
+        testPhone1 = Phone(1, 'Apple', 'iPhone 6')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_employee(testEmployee2)
+        testAssignmentMgr.add_phone(testPhone1)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee1)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee2)
+        with self.assertRaises(PhoneError):
+            testAssignmentMgr.assign(testPhone1.id, testEmployee2)
 
 
     def test_assign_phone_to_employee_who_already_has_a_phone(self):
         # TODO write this test and remove the self.fail() statement
         # TODO you'll need to fix the assign method in PhoneAssignments so it raises a PhoneError if the phone is alreaady assigned.
 
-        self.fail()
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testPhone1 = Phone(1, 'Apple', 'iPhone 6')
+        testPhone2 = Phone(2, 'Apple', 'iPhone 5')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_phone(testPhone1)
+        testAssignmentMgr.add_phone(testPhone2)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee1)
+        testAssignmentMgr.assign(testPhone2.id, testEmployee1)
+        with self.assertRaises(PhoneError):
+            testAssignmentMgr.assign(testPhone2.id, testEmployee1)
 
 
     def test_assign_phone_to_the_employee_who_already_has_this_phone(self):
         # TODO The method should not make any changes but NOT raise a PhoneError if a phone
         # is assigned to the same user it is currenly assigned to.
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testPhone1 = Phone(1, 'Apple', 'iPhone 6')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_phone(testPhone1)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee1)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee1)
+        self.assertEquals(testEmployee1.id, testPhone1.employee_id)
 
-        self.fail()
 
 
     def test_un_assign_phone(self):
         # TODO write this test and remove the self.fail() statement
         # Assign a phone, unasign the phone, verify the employee_id is None
-        self.fail()
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testPhone1 = Phone(1, 'Apple', 'iPhone 6')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_phone(testPhone1)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee1)
+        testAssignmentMgr.unassign(testPhone1.id, testEmployee1)
+        self.assertFalse(testEmployee1.id, testPhone1.employee_id)
 
 
     def test_get_phone_info_for_employee(self):
@@ -87,5 +140,17 @@ class TestPhoneManager(unittest.TestCase):
 
         # TODO check that the method returns None if the employee does not have a phone
         # TODO check that the method raises an PhoneError if the employee does not exist
+        testEmployee1 = Employee(1, 'Taylor Swift')
+        testPhone1 = Phone(1, 'Apple', 'iPhone 6')
+        testPhone2 = Phone(2, 'Apple', 'iPhone 5')
+        testAssignmentMgr = PhoneAssignments()
+        testAssignmentMgr.add_employee(testEmployee1)
+        testAssignmentMgr.add_phone(testPhone1)
+        testAssignmentMgr.add_phone(testPhone2)
+        testAssignmentMgr.assign(testPhone1.id, testEmployee1)
+        testPhone_Info = testAssignmentMgr.phone_info(testEmployee1)
+        self.assertTrue(testPhone1.id, testPhone_Info)
+        testPhone_Info2 = testAssignmentMgr.phone_info(testEmployee2)
+        with self.assertRaises(PhoneError):
+            testPhone_Info2 = testAssignmentMgr.phone_info(testEmployee2)
 
-        self.fail()
